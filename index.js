@@ -2,9 +2,16 @@ import express from 'express'
 const app = express()
 const port = 40404
 
+app.use(express.json())
+
 app.post('/', (req, res) => {
-  console.log(req) //{ "type": "confirmation", "group_id": 188903082 }
-  res.send('820bbe48')
+  if(req.body.secret === 'satana_mogila_kladbische_govno_hyila'){
+    const text = req.body.object.message.text
+    if(text.indexOf('гдз ') === 0) {
+      console.log(text)
+    }
+  }
+  res.send('ok')
 })
 
 app.listen(port, () => {
