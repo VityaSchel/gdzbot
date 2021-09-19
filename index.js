@@ -10,7 +10,9 @@ app.use(express.json())
 const getPictures = async numbers => {
   const apiURL = `https://gdz.ru/class-10/algebra/nikolskij-potapov/${numbers[0]}-item-${numbers[1]}/`
   let gdz = await fetch(apiURL)
+  console.log(gdz.status)
   let gdzPage = await gdz.text()
+  console.log(gdzPage)
   const root = parse(gdzPage)
   const solution = root.querySelector('.with-overtask > img').src
   console.log(numbers.join('.'), solution)
