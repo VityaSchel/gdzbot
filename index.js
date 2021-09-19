@@ -8,7 +8,10 @@ app.post('/', (req, res) => {
   if(req.body.secret === 'satana_mogila_kladbische_govno_hyila'){
     const text = req.body.object.message.text
     if(text.indexOf('гдз ') === 0) {
-      console.log(text)
+      text = text.substring(4).strip()
+      numbers = text.replace(/\n/g, ' ').split(' ').filter(String).join(' ')
+      numbers = numbers.match(/[1-3]\.[1-9]{0,3}/g)
+      console.log(numbers)
     }
   }
   res.send('ok')
