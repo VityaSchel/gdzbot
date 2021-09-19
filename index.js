@@ -2,7 +2,8 @@ import express from 'express'
 const app = express()
 const port = 40404
 import fetch from 'node-fetch'
-import { parse } from 'node-html-parser'
+import nodeHtmlParser from 'node-html-parser'
+const { parse } = nodeHtmlParser
 
 app.use(express.json())
 
