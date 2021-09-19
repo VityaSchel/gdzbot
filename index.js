@@ -16,8 +16,9 @@ const getPictures = async numbers => {
   let gdzPage = await gdz.text()
   // console.log(gdzPage)
   const root = parse(gdzPage)
-  const solution = root.querySelector('.with-overtask > img').src
-  console.log(numbers.join('.'), solution)
+  const solution = root.querySelector('.with-overtask > img')
+  console.log(solution);
+  console.log(numbers.join('.'), solution.getAttribute('src'))
 }
 
 app.post('/', (req, res) => {
