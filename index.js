@@ -8,7 +8,9 @@ const { parse } = nodeHtmlParser
 app.use(express.json())
 
 const getPictures = async numbers => {
+  console.log(numbers);
   const apiURL = `https://gdz.ru/class-10/algebra/nikolskij-potapov/${numbers[0]}-item-${numbers[1]}/`
+  console.log(apiURL);
   let gdz = await fetch(apiURL)
   console.log(gdz.status)
   let gdzPage = await gdz.text()
