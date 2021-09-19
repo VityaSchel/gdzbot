@@ -14,7 +14,7 @@ const getPictures = async numbers => {
   let gdz = await fetch(apiURL)
   console.log(gdz.status)
   let gdzPage = await gdz.text()
-  console.log(gdzPage)
+  // console.log(gdzPage)
   const root = parse(gdzPage)
   const solution = root.querySelector('.with-overtask > img').src
   console.log(numbers.join('.'), solution)
