@@ -10,8 +10,13 @@ app.post('/', (req, res) => {
     if(text.indexOf('гдз ') === 0) {
       text = text.substring(4).trim()
       let numbers = text.replace(/\n/g, ' ').split(' ').filter(String).join(' ')
-      numbers = numbers.match(/[1-3]\.[1-9]{0,3}/g)
-      console.log(numbers)
+      numbers = numbers.match(/[1-3]\.[1-9]{0,3} ?\(?([а-яА-Я],? ?)*\)?/g)
+      let homework = numbers.map(n => {
+        let letters = n.match(/[а-яА-Я]/g)
+        let number = n.match(/[1-3]\.[1-9]{0,3}/)[0]
+        return [number, letters]
+      })
+      console.log(homework)
     }
   }
   res.send('ok')
