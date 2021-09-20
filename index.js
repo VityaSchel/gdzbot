@@ -24,7 +24,7 @@ const getPictures = async (numbers, notFound) => {
   const root = parse(gdzPage)
   const solution = root.querySelector('.with-overtask > img')
   if(solution === null) {
-    notFound.push(numbers.join('.'))
+    notFound.a.push(numbers.join('.'))
   } else {
     const solutionPicture = 'https:'+solution.getAttribute('src')
     return solutionPicture
@@ -111,9 +111,12 @@ app.post('/', async (req, res) => {
       if(homework.length > 5) messageText += 'вк не разрешает больше 5 картинок в одном сообщении'
       homework.length = Math.min(5, homework.length)
       group_id = req.body.group_id
-      let notFound = []
+      let notFound = { a: [] }
       let results = await Promise.all(homework.map(async hw => getPictures(hw[0], notFound)))
-      if(notFound.length) messageText += '. не найдены: '+notFound.join(', ')
+      if(notFound.length) {
+        if(messageText.length) messageText += '. '
+        messageText += 'не найдены: '+notFound.join(', ')
+      }
       const attachments = await Promise.all(results.filter(Boolean).map(async url => await uploadImage(url)))
       const query = new URLSearchParams({
         peer_id: message.peer_id,
