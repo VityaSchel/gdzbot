@@ -66,7 +66,6 @@ const sendFirstMessage = async peerID => {
   })
   let messages = await fetch(`https://api.vk.com/method/messages.getHistory?${historyQuery}`)
   let history = await messages.json()
-  console.log(history.response.items.length)
   if(history.response.items.length < 2) {
     let query = new URLSearchParams({
       peer_id: peerID,
