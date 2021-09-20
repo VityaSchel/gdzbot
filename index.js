@@ -4,6 +4,7 @@ const port = 40404
 import fetch from 'node-fetch'
 import nodeHtmlParser from 'node-html-parser'
 const { parse } = nodeHtmlParser
+import FormData from 'form-data'
 
 app.use(express.json())
 
@@ -64,8 +65,8 @@ const sendFirstMessage = async peerID => {
   })
   let messages = await fetch(`https://api.vk.com/method/messages.getHistory?${historyQuery}`)
   let history = await messages.json()
-  console.log(history);
-  if(history.items.length === 0) {
+  console.log(history.response.items)
+  if(history.response.items.length === 0) {
     let query = new URLSearchParams({
       peer_id: peerID,
       message: 'Чтобы воспользоваться ГДЗ-ботом, оплатите подписку (149 руб/мес). Получить ссылку для оплаты: /vadim',
