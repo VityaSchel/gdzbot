@@ -53,7 +53,7 @@ const uploadImage = async url => {
   })
   let savedAttachment = await fetch(`https://api.vk.com/method/photos.saveMessagesPhoto?${saveQuery}`)
   let attachment = await savedAttachment.json()
-  return `photo${attachment.response.owner_id}_${attachment.response.id}`
+  return `photo${attachment.response[0].owner_id}_${attachment.response[0].id}`
 }
 
 const sendFirstMessage = async peerID => {
@@ -82,6 +82,7 @@ const sendFirstMessage = async peerID => {
 }
 
 app.post('/', async (req, res) => {
+  res.send('ok')
   if(req.body.secret === 'satana_mogila_kladbische_govno_hyila'){
     const message = req.body.object.message
     let text = message.text
@@ -114,7 +115,6 @@ app.post('/', async (req, res) => {
       fetch(`https://api.vk.com/method/messages.send?${query}`)
     }
   }
-  res.send('ok')
 })
 
 app.listen(port, () => {
