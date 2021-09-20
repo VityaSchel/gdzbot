@@ -59,18 +59,20 @@ const uploadImage = async url => {
 const sendFirstMessage = async peerID => {
   const historyQuery = new URLSearchParams({
     peer_id: peerID,
-    count: 1,
+    count: 2,
     ...b
   })
   let messages = await fetch(`https://api.vk.com/method/messages.getHistory?${historyQuery}`)
   let history = await messages.json()
-  if(history.response.items.length === 0) {
+  console.log(history.response.items.length)
+  if(history.response.items.length < 2) {
     let query = new URLSearchParams({
       peer_id: peerID,
       message: 'Чтобы воспользоваться ГДЗ-ботом, оплатите подписку (149 руб/мес). Получить ссылку для оплаты: /vadim',
+      random_id: 
       ...b
     })
-    await fetch(`https://api.vk.com/method/messages.send?${query}`)
+    let t = await fetch(`https://api.vk.com/method/messages.send?${query}`)
     await new Promise(resolve => setTimeout(() => resolve(), 1000))
     query = new URLSearchParams({
       peer_id: peerID,
