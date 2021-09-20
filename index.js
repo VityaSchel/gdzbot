@@ -43,12 +43,11 @@ const uploadImage = async url => {
     body
   })
   let uploadedPhoto = await uploadedPhotoRaw.json()
-  console.log(uploadedPhoto)
 
   const saveQuery = {
-    photo: uploadedPhoto.response.photo,
-    server: uploadedPhoto.response.server,
-    hash: uploadedPhoto.response.hash,
+    photo: uploadedPhoto.photo,
+    server: uploadedPhoto.server,
+    hash: uploadedPhoto.hash,
     ...b
   }
   let savedAttachment = await fetch(`https://api.vk.com/method/photos.saveMessagesPhoto?${saveQuery}`)
@@ -65,7 +64,6 @@ const sendFirstMessage = async peerID => {
   })
   let messages = await fetch(`https://api.vk.com/method/messages.getHistory?${historyQuery}`)
   let history = await messages.json()
-  console.log(history.response.items)
   if(history.response.items.length === 0) {
     let query = new URLSearchParams({
       peer_id: peerID,
