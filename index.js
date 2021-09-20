@@ -31,8 +31,7 @@ const uploadImage = async url => {
   })
   let uploadServerResponse = await fetch(`https://api.vk.com/method/photos.getMessagesUploadServer?${query}`)
   let uploadServer = await uploadServerResponse.json()
-  console.log(uploadServer);
-  let uploadServerURL = uploadServer.upload_url
+  let uploadServerURL = uploadServer.response.upload_url
 
   let solutionImage = await fetch(url)
   let solutionImageBuffer = await solutionImage.buffer()
@@ -47,9 +46,9 @@ const uploadImage = async url => {
   console.log(uploadedPhoto)
 
   const saveQuery = {
-    photo: uploadedPhoto.photo,
-    server: uploadedPhoto.server,
-    hash: uploadedPhoto.hash,
+    photo: uploadedPhoto.response.photo,
+    server: uploadedPhoto.response.server,
+    hash: uploadedPhoto.response.hash,
     ...b
   }
   let savedAttachment = await fetch(`https://api.vk.com/method/photos.saveMessagesPhoto?${saveQuery}`)
