@@ -22,11 +22,11 @@ const getPictures = async (numbers, notFound) => {
   let gdz = await fetch(apiURL)
   let gdzPage = await gdz.text()
   const root = parse(gdzPage)
-  const solution = 'https:'+root.querySelector('.with-overtask > img')
+  const solution = root.querySelector('.with-overtask > img')
   if(solution === null) {
     notFound.push(numbers.join('.'))
   } else {
-    const solutionPicture = solution.getAttribute('src')
+    const solutionPicture = 'https:'+solution.getAttribute('src')
     return solutionPicture
   }
 }
