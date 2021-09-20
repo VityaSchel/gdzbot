@@ -102,7 +102,9 @@ app.post('/', async (req, res) => {
       let tooMany = homework.length > 5
       homework.length = Math.min(5, homework.length)
       group_id = req.body.group_id
+      console.log(homework)
       let results = await Promise.all(homework.map(async hw => getPictures(hw[0])))
+      console.log(results)
       const attachments = await Promise.all(results.map(async url => await uploadImage(url)))
       const query = new URLSearchParams({
         peer_id: message.peer_id,
