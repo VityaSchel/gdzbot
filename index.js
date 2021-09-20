@@ -8,6 +8,8 @@ import FormData from 'form-data'
 
 app.use(express.json())
 
+const randomID = () => String(Date.now()).substring(7)+('000'+Math.floor(Math.random()*1000)).substr(-3)
+
 const access_token = '13fc8857c36b94d03b2d947a1c64fa774802f4b6436fd4ecc096a4c58a015cc904e073ed5a141dddce5df'
 let group_id
 const b = {
@@ -69,14 +71,15 @@ const sendFirstMessage = async peerID => {
     let query = new URLSearchParams({
       peer_id: peerID,
       message: 'Чтобы воспользоваться ГДЗ-ботом, оплатите подписку (149 руб/мес). Получить ссылку для оплаты: /vadim',
-      random_id: 
+      random_id: randomID(),
       ...b
     })
-    let t = await fetch(`https://api.vk.com/method/messages.send?${query}`)
+    await fetch(`https://api.vk.com/method/messages.send?${query}`)
     await new Promise(resolve => setTimeout(() => resolve(), 1000))
     query = new URLSearchParams({
       peer_id: peerID,
       message: 'шутка',
+      random_id: randomID(),
       ...b
     })
     await fetch(`https://api.vk.com/method/messages.send?${query}`)
@@ -105,10 +108,9 @@ app.post('/', async (req, res) => {
       group_id = req.body.group_id
       let results = await Promise.all(homework.map(async hw => getPictures(hw[0])))
       const attachments = await Promise.all(results.map(async url => await uploadImage(url)))
-      console.log(attachments);
       const query = new URLSearchParams({
         peer_id: message.peer_id,
-        random_id: String(Date.now()).substring(7)+('000'+Math.floor(Math.random()*1000)).substr(-3),
+        random_id: randomID(),
         attachment: attachments.join(','),
         reply_to: message.id,
         ...(tooMany && { message: 'вк не разрешает больше 5 картинок в одном сообщении' }),
