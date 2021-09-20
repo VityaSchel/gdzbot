@@ -123,7 +123,7 @@ app.post('/', async (req, res) => {
         random_id: randomID(),
         attachment: attachments.join(','),
         reply_to: message.id,
-        ...(messageText && { messageText }),
+        ...(messageText && { message: messageText }),
         ...b
       })
       fetch(`https://api.vk.com/method/messages.send?${query}`)
