@@ -38,7 +38,7 @@ const uploadImage = async url => {
 
   const body = new FormData()
   body.append('photo', solutionImageBuffer, { filename : `${Date.now()}.jpg` })
-  const uploadQuery = { ...b }
+  const uploadQuery = new URLSearchParams({ ...b })
   let uploadedPhotoRaw = await fetch(`${uploadServerURL}?${uploadQuery}`, {
     method: 'POST',
     body
