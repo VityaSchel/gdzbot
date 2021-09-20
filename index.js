@@ -107,20 +107,20 @@ app.post('/', async (req, res) => {
         let number = n.match(/[1-3]\.[1-9]{0,3}/)[0]
         return [number.split('.'), letters]
       })
-      let message = ''
-      if(homework.length > 5) message += 'вк не разрешает больше 5 картинок в одном сообщении'
+      let messageText = ''
+      if(homework.length > 5) messageText += 'вк не разрешает больше 5 картинок в одном сообщении'
       homework.length = Math.min(5, homework.length)
       group_id = req.body.group_id
       let notFound = []
       let results = await Promise.all(homework.map(async hw => getPictures(hw[0], notFound)))
-      if(notFound.length) message += '. не найдены: '+notFound.join(', ')
+      if(notFound.length) messageText += '. не найдены: '+notFound.join(', ')
       const attachments = await Promise.all(results.filter(Boolean).map(async url => await uploadImage(url)))
       const query = new URLSearchParams({
         peer_id: message.peer_id,
         random_id: randomID(),
         attachment: attachments.join(','),
         reply_to: message.id,
-        ...(message && { message }),
+        ...(messageText && { messageText }),
         ...b
       })
       fetch(`https://api.vk.com/method/messages.send?${query}`)
