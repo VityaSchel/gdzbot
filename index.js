@@ -53,8 +53,7 @@ const uploadImage = async url => {
   })
   let savedAttachment = await fetch(`https://api.vk.com/method/photos.saveMessagesPhoto?${saveQuery}`)
   let attachment = await savedAttachment.json()
-  console.log(attachment)
-  return `photo${attachment.owner_id}_${attachment.id}`
+  return `photo${attachment.response.owner_id}_${attachment.response.id}`
 }
 
 const sendFirstMessage = async peerID => {
@@ -103,6 +102,7 @@ app.post('/', async (req, res) => {
       group_id = req.body.group_id
       let results = await Promise.all(homework.map(async hw => getPictures(hw[0])))
       const attachments = await Promise.all(results.map(async url => await uploadImage(url)))
+      console.log(attachments);
       const query = new URLSearchParams({
         peer_id: message.peer_id,
         random_id: String(Date.now()).substring(7)+('000'+Math.floor(Math.random()*1000)).substr(-3),
