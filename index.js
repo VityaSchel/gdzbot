@@ -4,11 +4,10 @@ const port = 40404
 import fetch from 'node-fetch'
 import nodeHtmlParser from 'node-html-parser'
 const { parse } = nodeHtmlParser
-import fs from 'fs'
 
 app.use(express.json())
 
-const access_token = ''
+const access_token = '6cb73bca06b83bf91d535c1b66caf8c0a6be371219acb9592f52df0648564f360611fdc998ad06966652c'
 let group_id
 const b = {
   v: '5.131',
