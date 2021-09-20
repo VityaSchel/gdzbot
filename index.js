@@ -115,8 +115,8 @@ app.post('/', async (req, res) => {
       let results = await Promise.all(homework.map(async hw => {
         let result = await getPictures(hw[0])
         if(result === undefined) notFound.push(hw[0].join('.'))
+        else return result
       }))
-      console.log(notFound);
       if(notFound.length) {
         if(messageText.length) messageText += '. '
         messageText += 'не найдены: '+notFound.join(', ')
