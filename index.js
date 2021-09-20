@@ -38,19 +38,19 @@ const uploadImage = async url => {
 
   const body = new FormData()
   body.append('photo', solutionImageBuffer, { filename : `${Date.now()}.jpg` })
-  const uploadQuery = new URLSearchParams({ ...b })
+  const uploadQuery = new URLSearchParams(b)
   let uploadedPhotoRaw = await fetch(`${uploadServerURL}?${uploadQuery}`, {
     method: 'POST',
     body
   })
   let uploadedPhoto = await uploadedPhotoRaw.json()
 
-  const saveQuery = {
+  const saveQuery = new URLSearchParams({
     photo: uploadedPhoto.photo,
     server: uploadedPhoto.server,
     hash: uploadedPhoto.hash,
     ...b
-  }
+  })
   let savedAttachment = await fetch(`https://api.vk.com/method/photos.saveMessagesPhoto?${saveQuery}`)
   let attachment = await savedAttachment.json()
   console.log(attachment)
