@@ -38,10 +38,10 @@ const uploadImage = async url => {
 
   const body = new FormData()
   body.append('photo', solutionImageBuffer, { filename : `${Date.now()}.jpg` })
-  let uploadedPhotoRaw = await fetch(uploadServerURL, {
+  const uploadQuery = { ...b }
+  let uploadedPhotoRaw = await fetch(`${uploadServerURL}?${uploadQuery}`, {
     method: 'POST',
-    body,
-    ...b
+    body
   })
   let uploadedPhoto = await uploadedPhotoRaw.json()
 
