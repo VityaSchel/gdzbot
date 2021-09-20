@@ -17,14 +17,14 @@ const b = {
   access_token
 }
 
-const getPictures = async (numbers, notFound) => {
+const getPictures = async numbers => {
   const apiURL = `https://gdz.ru/class-10/algebra/nikolskij-potapov/${numbers[0]}-item-${numbers[1]}/`
   let gdz = await fetch(apiURL)
   let gdzPage = await gdz.text()
   const root = parse(gdzPage)
   const solution = root.querySelector('.with-overtask > img')
   if(solution === null) {
-    notFound.a.push(numbers.join('.'))
+    return undefined
   } else {
     const solutionPicture = 'https:'+solution.getAttribute('src')
     return solutionPicture
@@ -111,8 +111,12 @@ app.post('/', async (req, res) => {
       if(homework.length > 5) messageText += 'вк не разрешает больше 5 картинок в одном сообщении'
       homework.length = Math.min(5, homework.length)
       group_id = req.body.group_id
-      let notFound = { a: [] }
-      let results = await Promise.all(homework.map(async hw => getPictures(hw[0], notFound)))
+      let notFound = []
+      let results = await Promise.all(homework.map(async hw => {
+        let result = await getPictures(hw[0])
+        if(result === undefined) notFound.push(hw[0].join('.'))
+      }))
+      console.log(notFound);
       if(notFound.length) {
         if(messageText.length) messageText += '. '
         messageText += 'не найдены: '+notFound.join(', ')
