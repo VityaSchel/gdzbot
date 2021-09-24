@@ -24,12 +24,12 @@ const getPictures = async (numbers, subject) => {
   if(gdz.status !== 200) return undefined
   let gdzPage = await gdz.text()
   const root = parse(gdzPage)
-  const solution = root.querySelector('.with-overtask > img')
-  if(solution === null) {
+  const solutions = root.querySelectorAll('.with-overtask > img')
+  if(!solutions.length) {
     return undefined
   } else {
-    const solutionPicture = 'https:'+solution.getAttribute('src')
-    return solutionPicture
+    const solutionPictures = Array.from(solutions).map(img => 'https:'+img.getAttribute('src'))
+    return solutionPictures
   }
 }
 
@@ -134,7 +134,13 @@ app.post('/', async (req, res) => {
         messageText += 'не найдены: '+notFound.join(', ')
       }
 
-      const attachments = await Promise.all(results.filter(Boolean).map(async url => await uploadImage(url)))
+      results = results.filter(Boolean)
+      let urls = []
+      for (let solutionUrls of results) {
+        urls.concat(...solutionUrls)
+      }
+
+      const attachments = await Promise.all(urls.map(async url => await uploadImage(url)))
       const query = new URLSearchParams({
         peer_id: message.peer_id,
         random_id: randomID(),
