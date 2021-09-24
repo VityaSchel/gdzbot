@@ -120,8 +120,9 @@ app.post('/', async (req, res) => {
       })
 
       let messageText = ''
-      if(homework.length > 5) messageText += 'вк не разрешает больше 5 картинок в одном сообщении'
-      homework.length = Math.min(5, homework.length)
+      const maxPictures = 10
+      if(homework.length > maxPictures) messageText += 'вк не разрешает больше 10 картинок в одном сообщении'
+      homework.length = Math.min(maxPictures, homework.length)
       group_id = req.body.group_id
       let notFound = []
       let results = await Promise.all(homework.map(async hw => {
