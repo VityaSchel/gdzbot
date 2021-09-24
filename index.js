@@ -137,7 +137,7 @@ app.post('/', async (req, res) => {
       results = results.filter(Boolean)
       let urls = []
       for (let solutionUrls of results) {
-        urls.concat(...solutionUrls)
+        urls = urls.concat(...solutionUrls)
       }
 
       const attachments = await Promise.all(urls.map(async url => await uploadImage(url)))
