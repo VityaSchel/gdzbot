@@ -17,9 +17,11 @@ const b = {
   access_token
 }
 
-const getPictures = async numbers => {
-  const apiURL = `https://gdz.ru/class-10/algebra/nikolskij-potapov/${numbers[0]}-item-${numbers[1]}/`
-  let gdz = await fetch(apiURL)
+const getPictures = async (numbers, subject) => {
+  const mathURL = `https://gdz.ru/class-10/algebra/nikolskij-potapov/${numbers[0]}-item-${numbers[1]}/`
+  const physicsURL = `https://gdz.ru/class-11/fizika/rymkevich/${numbers[0]}-nom/`
+  let gdz = await fetch({ 'physics': physicsURL, 'math': mathURL }[subject])
+  if(gdz.status !== 200) return undefined
   let gdzPage = await gdz.text()
   const root = parse(gdzPage)
   const solution = root.querySelector('.with-overtask > img')
@@ -102,8 +104,10 @@ app.post('/', async (req, res) => {
       text = text.substring(4).trim()
 
       let regex = '[1-9]{1,2}\\.[0-9]{0,3}'
+      let subject = 'math'
       if(['физ', 'физика', 'рым', 'рымкевич'].some(ind => text.indexOf(ind) === 0)) {
         regex = '[0-9]{1,4}'
+        subject = 'physics'
       }
 
       let numbers = text.replace(/\n/g, ' ').split(' ').filter(String).join(' ')
@@ -114,7 +118,6 @@ app.post('/', async (req, res) => {
         let number = n.match(new RegExp(regex))[0]
         return [number.split('.'), letters]
       })
-      console.log(homework)
 
       let messageText = ''
       if(homework.length > 5) messageText += 'вк не разрешает больше 5 картинок в одном сообщении'
@@ -122,7 +125,7 @@ app.post('/', async (req, res) => {
       group_id = req.body.group_id
       let notFound = []
       let results = await Promise.all(homework.map(async hw => {
-        let result = await getPictures(hw[0])
+        let result = await getPictures(hw[0], subject)
         if(result === undefined) notFound.push(hw[0].join('.'))
         else return result
       }))
