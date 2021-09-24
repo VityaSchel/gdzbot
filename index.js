@@ -101,10 +101,11 @@ app.post('/', async (req, res) => {
 
       text = text.substring(4).trim()
       let numbers = text.replace(/\n/g, ' ').split(' ').filter(String).join(' ')
-      numbers = numbers.match(/[1-3]\.[1-9]{0,3} ?\(?([а-яА-Я],? ?)*\)?/g)
+      const regex = '[1-99]\\.[0-9]{0,3}'
+      numbers = numbers.match(new RegExp(`${regex} ?\\(?([а-яА-Я],? ?)*\\)?`, 'g'))
       let homework = numbers.map(n => {
         let letters = n.match(/[а-яА-Я]/g)
-        let number = n.match(/[1-3]\.[1-9]{0,3}/)[0]
+        let number = n.match(new RegExp(regex))[0]
         return [number.split('.'), letters]
       })
       let messageText = ''
