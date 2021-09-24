@@ -100,14 +100,22 @@ app.post('/', async (req, res) => {
       await sendFirstMessage(message.peer_id)
 
       text = text.substring(4).trim()
+
+      let regex = '[1-9]{1,2}\\.[0-9]{0,3}'
+      if(['физ', 'физика', 'рым', 'рымкевич'].some(ind => text.indexOf(ind) === 0)) {
+        regex = '[0-9]{1,4}'
+      }
+
       let numbers = text.replace(/\n/g, ' ').split(' ').filter(String).join(' ')
-      const regex = '[1-99]\\.[0-9]{0,3}'
+
       numbers = numbers.match(new RegExp(`${regex} ?\\(?([а-яА-Я],? ?)*\\)?`, 'g'))
       let homework = numbers.map(n => {
         let letters = n.match(/[а-яА-Я]/g)
         let number = n.match(new RegExp(regex))[0]
         return [number.split('.'), letters]
       })
+      console.log(homework)
+
       let messageText = ''
       if(homework.length > 5) messageText += 'вк не разрешает больше 5 картинок в одном сообщении'
       homework.length = Math.min(5, homework.length)
@@ -122,6 +130,7 @@ app.post('/', async (req, res) => {
         if(messageText.length) messageText += '. '
         messageText += 'не найдены: '+notFound.join(', ')
       }
+
       const attachments = await Promise.all(results.filter(Boolean).map(async url => await uploadImage(url)))
       const query = new URLSearchParams({
         peer_id: message.peer_id,
